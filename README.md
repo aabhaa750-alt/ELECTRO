@@ -1,5 +1,7 @@
 # ⚡ ElectroMart — Electronics Retail Website
 
+LIVE APP - https://electro-1-dh0v.onrender.com/ 
+
 A fast, lightweight electronics retail platform built with **Flask + SQLite + Bootstrap + vanilla JavaScript**.
 Inspired by the shopping experience of Myntra, Zepto, Apple Store, Reliance Digital, and Croma — real retail
 UX, not a corporate brochure site.
