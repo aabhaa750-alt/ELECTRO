@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Order Confirmed - ElectroMart{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5" style="max-width: 720px;">
+
+  <div class="em-order-hero mb-4">
+    <div class="em-order-check"><i class="fa-solid fa-check text-white"></i></div>
+    <h2 class="fw-bold mb-1">Order Confirmed! 🎉</h2>
+    <p class="mb-0 text-secondary-emphasis">Thank you for shopping with ElectroMart</p>
+    <p class="em-order-id mt-3 mb-0">Order #{{ order.id }}</p>
+    <div class="em-order-total">₹{{ "{:,.0f}".format(order.total) }}</div>
+    {% if order.discount %}
+    <p class="small mt-1 mb-0" style="opacity:0.85;">You saved ₹{{ "{:,.0f}".format(order.discount) }} on this order{% if order.coupon_code %} (coupon {{ order.coupon_code }} applied){% endif %}</p>
+    {% endif %}
+  </div>
+
+  <div class="em-admin-card mb-4">
+    <h6 class="em-admin-card-title"><i class="fa-solid fa-box-open"></i> Items in this order</h6>
+    <div class="table-responsive">
+      <table class="table em-table align-middle mb-0">
+        <thead><tr><th>Product</th><th>Category</th><th>Qty</th><th>Price</th></tr></thead>
+        <tbody>
+          {% for item in items %}
+          <tr>
+            <td>{{ item.product_name }}</td>
+            <td>{{ item.category }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>₹{{ "{:,.0f}".format(item.price) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="text-center">
+    <a href="/" class="btn em-btn-primary px-4"><i class="fa-solid fa-store"></i> Continue Shopping</a>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // Fire the full celebration the moment this page lands — sound, crackers and balloons.
+  document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(() => {
+      if (typeof playSuccessSound === "function") playSuccessSound();
+      if (typeof fireCrackers === "function") fireCrackers();
+      if (typeof launchBalloons === "function") launchBalloons(20);
+    }, 200);
+  });
+</script>
+{% endblock %}

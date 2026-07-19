@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard - ElectroMart{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-3 px-lg-4 mt-4 em-admin">
+
+  <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+    <div>
+      <h2 class="mb-0"><i class="fa-solid fa-gauge-high"></i> Admin Dashboard</h2>
+      <p class="text-secondary mb-0">Business overview &amp; inventory control for ElectroMart</p>
+    </div>
+    <span class="badge em-live-badge"><i class="fa-solid fa-circle"></i> Live</span>
+  </div>
+
+  <!-- Stat cards -->
+  <div class="row g-3 mb-4" id="statCardsRow"></div>
+
+  <!-- Charts -->
+  <div class="row g-3 mb-4">
+    <div class="col-lg-7">
+      <div class="em-admin-card h-100">
+        <h6 class="em-admin-card-title"><i class="fa-solid fa-chart-line"></i> Revenue &amp; Profit Trend (last 14 days)</h6>
+        <canvas id="revenueChart" height="220"></canvas>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <div class="em-admin-card h-100">
+        <h6 class="em-admin-card-title"><i class="fa-solid fa-chart-pie"></i> Revenue by Category</h6>
+        <canvas id="categoryChart" height="220"></canvas>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="em-admin-card h-100">
+        <h6 class="em-admin-card-title"><i class="fa-solid fa-ranking-star"></i> Top Selling Products</h6>
+        <canvas id="topProductsChart" height="220"></canvas>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="em-admin-card h-100">
+        <h6 class="em-admin-card-title"><i class="fa-solid fa-boxes-stacked"></i> Stock by Category</h6>
+        <canvas id="stockChart" height="220"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Budget tracking -->
+  <div class="em-admin-card mb-4">
+    <h6 class="em-admin-card-title"><i class="fa-solid fa-sack-dollar"></i> Budget Tracking</h6>
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <div class="em-progress-wrap">
+          <div class="progress em-budget-progress">
+            <div class="progress-bar" id="budgetProgressBar" role="progressbar" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between small text-secondary mt-1">
+          <span>Current Inventory Value: <strong id="budgetInvested">₹0</strong></span>
+          <span>Initial Budget: <strong id="budgetTotal">₹0</strong></span>
+        </div>
+        <p class="small text-secondary mt-2 mb-0" id="budgetNote"></p>
+      </div>
+      <div class="col-md-4 text-md-end mt-3 mt-md-0">
+        <div class="em-remaining-budget">
+          <span class="small text-secondary">Remaining Budget</span>
+          <h4 id="budgetRemaining">₹0</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Low stock alerts -->
+  <div class="em-admin-card mb-4">
+    <h6 class="em-admin-card-title"><i class="fa-solid fa-triangle-exclamation text-warning"></i> Low Stock Alerts</h6>
+    <div class="table-responsive">
+      <table class="table em-table align-middle mb-0">
+        <thead><tr><th>Product</th><th>Category</th><th>Stock</th><th>Status</th></tr></thead>
+        <tbody id="lowStockTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Inventory management -->
+  <div class="em-admin-card mb-5">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+      <h6 class="em-admin-card-title mb-0"><i class="fa-solid fa-warehouse"></i> Inventory Management</h6>
+      <div class="d-flex gap-2">
+        <input type="text" class="form-control form-control-sm" id="inventorySearch" placeholder="Search products..." style="width:220px">
+        <button class="btn btn-sm em-btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
+          <i class="fa-solid fa-plus"></i> Add Product
+        </button>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table em-table align-middle mb-0">
+        <thead>
+          <tr>
+            <th>#</th><th>Image</th><th>Name</th><th>Category</th><th>MRP</th><th>Offer Price</th>
+            <th>Discount</th><th>Stock</th><th>Rating</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="inventoryTableBody"></tbody>
+      </table>
+    </div>
+    <div class="text-center mt-3">
+      <button class="btn btn-sm em-btn-outline" id="inventoryLoadMoreBtn">Load More</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Add Product Modal -->
+<div class="modal fade" id="addProductModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content em-modal">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">Add New Product</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addProductForm" class="row g-2">
+          <div class="col-12"><input class="form-control" name="name" placeholder="Product name" required></div>
+          <div class="col-6"><input class="form-control" name="category" placeholder="Category" required></div>
+          <div class="col-6"><input class="form-control" name="brand" placeholder="Brand" required></div>
+          <div class="col-6"><input class="form-control" name="mrp" type="number" placeholder="MRP" required></div>
+          <div class="col-6"><input class="form-control" name="offer_price" type="number" placeholder="Offer Price" required></div>
+          <div class="col-6"><input class="form-control" name="cost_price" type="number" placeholder="Cost Price"></div>
+          <div class="col-6"><input class="form-control" name="stock" type="number" placeholder="Stock" required></div>
+          <div class="col-6"><input class="form-control" name="warranty_months" type="number" placeholder="Warranty (months)"></div>
+          <div class="col-6"><input class="form-control" name="rating" type="number" step="0.1" placeholder="Rating"></div>
+          <div class="col-12"><input class="form-control" name="image_url" placeholder="Image URL (optional)"></div>
+          <div class="col-12"><textarea class="form-control" name="description" placeholder="Description" rows="2"></textarea></div>
+          <div class="col-12 mt-3"><button class="btn em-btn-primary w-100" type="submit">Add Product</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

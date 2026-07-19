@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container-fluid px-2 px-lg-4 mt-3">
+  <div class="row g-3">
+
+    <!-- ============ LEFT COLUMN (70%) ============ -->
+    <div class="col-lg-8">
+
+      <!-- Hero Banner -->
+      <div id="heroCarousel" class="carousel slide em-hero mb-4" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div class="em-hero-slide" style="background:linear-gradient(120deg,#0f0c29,#302b63,#24243e);">
+              <div>
+                <span class="em-hero-tag">Flash Sale Live</span>
+                <h1>Up to 40% off on Top Electronics</h1>
+                <p>Smartphones · Laptops · Audio · Wearables — grab the deal before the timer runs out.</p>
+                <a href="#flashSaleSection" class="btn em-btn-primary">Shop Flash Sale</a>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="em-hero-slide" style="background:linear-gradient(120deg,#1a2a6c,#b21f1f,#fdbb2d);">
+              <div>
+                <span class="em-hero-tag">New Arrivals</span>
+                <h1>Latest Laptops &amp; Tablets</h1>
+                <p>Power through work and play with the newest launches from top brands.</p>
+                <a href="#allProductsSection" class="btn em-btn-primary">Explore Now</a>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <div class="em-hero-slide" style="background:linear-gradient(120deg,#134e5e,#71b280);">
+              <div>
+                <span class="em-hero-tag">Trending</span>
+                <h1>Audio Gear Everyone's Buying</h1>
+                <p>Premium headphones and speakers with unbeatable prices.</p>
+                <a href="#trendingSection" class="btn em-btn-primary">See Trending</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+
+      <!-- Category chips -->
+      <div class="em-chip-row mb-4" id="categoryChipRow">
+        <button class="em-chip active" data-category="All">All</button>
+      </div>
+
+      <!-- Flash Sale -->
+      <section id="flashSaleSection" class="mb-4">
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <h4 class="em-section-title"><i class="fa-solid fa-fire text-danger"></i> Flash Sale</h4>
+          <div class="em-mini-timer" id="flashTimerMini"><i class="fa-regular fa-clock"></i> <span id="flashTimerText">--:--:--</span></div>
+        </div>
+        <div class="em-scroll-row" id="flashSaleRow"></div>
+      </section>
+
+      <!-- Trending -->
+      <section id="trendingSection" class="mb-4">
+        <h4 class="em-section-title mb-2"><i class="fa-solid fa-arrow-trend-up text-success"></i> Trending Products</h4>
+        <div class="em-scroll-row" id="trendingRow"></div>
+      </section>
+
+      <!-- All products + filters -->
+      <section id="allProductsSection">
+        <div class="em-filter-bar mb-3">
+          <h4 class="em-section-title mb-0 me-auto"><i class="fa-solid fa-layer-group"></i> All Products</h4>
+          <select class="form-select em-select" id="filterCategory">
+            <option value="All">All Categories</option>
+          </select>
+          <select class="form-select em-select" id="filterBrand">
+            <option value="">All Brands</option>
+          </select>
+          <select class="form-select em-select" id="filterSort">
+            <option value="">Sort: Featured</option>
+            <option value="price_low">Price: Low to High</option>
+            <option value="price_high">Price: High to Low</option>
+            <option value="discount">Highest Discount</option>
+            <option value="rating">Top Rated</option>
+            <option value="newest">Newest</option>
+          </select>
+          <div class="form-check em-check">
+            <input class="form-check-input" type="checkbox" id="filterInStock">
+            <label class="form-check-label" for="filterInStock">In stock only</label>
+          </div>
+        </div>
+        <div id="searchResultInfo" class="small text-secondary mb-2 d-none"></div>
+        <div class="row g-3" id="productsGrid"></div>
+        <div class="text-center my-4">
+          <button class="btn em-btn-outline" id="loadMoreBtn">Load More Products</button>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============ RIGHT COLUMN (30%) - STICKY ============ -->
+    <div class="col-lg-4">
+      <div class="em-sticky-panel">
+
+        <div class="em-panel-card em-panel-header">
+          <h5><i class="fa-solid fa-tags"></i> Live Offers</h5>
+          <p class="mb-0 small">Deals refresh in real time</p>
+        </div>
+
+        <!-- Flash sale timer -->
+        <div class="em-panel-card em-flash-timer-card">
+          <div class="d-flex justify-content-between align-items-center">
+            <span><i class="fa-solid fa-bolt text-warning"></i> Flash Sale ends in</span>
+          </div>
+          <div class="em-countdown" id="flashCountdown">
+            <div class="em-cd-box"><span id="cdHours">00</span><small>HRS</small></div>
+            <div class="em-cd-box"><span id="cdMinutes">00</span><small>MIN</small></div>
+            <div class="em-cd-box"><span id="cdSeconds">00</span><small>SEC</small></div>
+          </div>
+        </div>
+
+        <!-- Today's deals -->
+        <div class="em-panel-card">
+          <h6 class="em-panel-title"><i class="fa-solid fa-calendar-day"></i> Today's Deals</h6>
+          <div id="todaysDealsList"></div>
+        </div>
+
+        <!-- Quantity discounts -->
+        <div class="em-panel-card">
+          <h6 class="em-panel-title"><i class="fa-solid fa-layer-group"></i> Buy More, Save More</h6>
+          <ul class="em-tier-list" id="qtyTierList"></ul>
+        </div>
+
+        <!-- Cart value discounts -->
+        <div class="em-panel-card">
+          <h6 class="em-panel-title"><i class="fa-solid fa-wallet"></i> Cart Value Discounts</h6>
+          <ul class="em-tier-list" id="cartTierList"></ul>
+        </div>
+
+        <!-- Coupons -->
+        <div class="em-panel-card">
+          <h6 class="em-panel-title"><i class="fa-solid fa-ticket"></i> Coupon Codes</h6>
+          <div class="input-group mb-2">
+            <input type="text" class="form-control em-coupon-input" id="couponInput" placeholder="Enter coupon code">
+            <button class="btn em-btn-primary" id="applyCouponBtn">Apply</button>
+          </div>
+          <div id="couponMessage" class="small mb-2"></div>
+          <div id="couponList" class="em-coupon-list"></div>
+        </div>
+
+        <!-- Savings calculator -->
+        <div class="em-panel-card em-savings-card">
+          <h6 class="em-panel-title"><i class="fa-solid fa-piggy-bank"></i> Your Savings</h6>
+          <div class="em-savings-amount" id="totalSavingsAmount">₹0</div>
+          <p class="small mb-0 text-secondary">saved on this order so far</p>
+        </div>
+
+        <!-- Live cart summary -->
+        <div class="em-panel-card em-cart-card">
+          <h6 class="em-panel-title"><i class="fa-solid fa-cart-shopping"></i> Live Cart Summary</h6>
+          <div id="cartItemsList" class="em-cart-items"></div>
+          <div id="emptyCartMsg" class="text-center text-secondary py-3">
+            <i class="fa-solid fa-cart-arrow-down fa-2x mb-2"></i>
+            <p class="small mb-0">Your cart is empty</p>
+          </div>
+          <div class="em-cart-breakdown" id="cartBreakdown"></div>
+          <button class="btn em-btn-checkout w-100 mt-2" id="checkoutBtn" disabled>
+            <i class="fa-solid fa-lock"></i> Checkout Securely
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Product Quick View Modal -->
+<div class="modal fade" id="productModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content em-modal" id="productModalContent"></div>
+  </div>
+</div>
+
+<!-- Out-of-stock Notify Me Modal -->
+<div class="modal fade" id="notifyModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content em-modal">
+      <div class="modal-header border-0">
+        <h5 class="modal-title"><i class="fa-solid fa-bell text-primary"></i> Notify Me</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p class="small text-secondary" id="notifyProductName"></p>
+        <input type="hidden" id="notifyProductId">
+        <label class="form-label small fw-semibold">Your email</label>
+        <input type="email" class="form-control" id="notifyEmailInput" placeholder="you@email.com" required>
+        <button class="btn em-btn-primary w-100 mt-3" id="notifySubmitBtn">
+          <i class="fa-solid fa-paper-plane"></i> Notify Me When Available
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}

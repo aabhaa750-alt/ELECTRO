@@ -1,0 +1,70 @@
+.em-admin { padding-bottom: 3rem; }
+
+.em-live-badge {
+  background: #e8f8ef; color: #17c964; font-weight: 700; padding: 6px 12px; border-radius: 20px; font-size: 0.75rem;
+}
+.em-live-badge i { font-size: 0.55rem; margin-right: 4px; animation: em-blink 1.5s infinite; }
+@keyframes em-blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+.em-stat-card {
+  background: #fff; border-radius: 14px; padding: 1.1rem 1.3rem; border: 1px solid #e9eaf2;
+  box-shadow: 0 4px 20px rgba(20,20,50,0.06); display: flex; align-items: center; gap: 14px; height: 100%;
+  position: relative; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s;
+  animation: em-card-pop 0.4s ease both;
+}
+.em-stat-card:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(20,20,50,0.12); }
+.em-stat-card::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, #4f46e5, #00d9ff, #17c964, #ffb020, #ff3b5c, #7c3aed);
+  background-size: 300% 100%; animation: em-gradient-shift 6s linear infinite;
+}
+@keyframes em-gradient-shift { 0% { background-position: 0% 0; } 100% { background-position: 100% 0; } }
+@keyframes em-card-pop { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.em-stat-icon {
+  width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; color: #fff; flex-shrink: 0; box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}
+.em-stat-label { font-size: 0.76rem; color: #6b7280; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
+.em-stat-value { font-size: 1.35rem; font-weight: 800; color: #1a1a2e; }
+.em-stat-sub { font-size: 0.72rem; color: #9ca0b5; }
+
+.em-admin-card {
+  background: #fff; border-radius: 14px; padding: 1.2rem 1.3rem; border: 1px solid #e9eaf2;
+  box-shadow: 0 4px 20px rgba(20,20,50,0.06); position: relative; overflow: hidden;
+}
+.em-admin-card::before {
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 14px 14px 0 0;
+  background: linear-gradient(90deg, #7c3aed, #00d9ff, #17c964);
+}
+.em-admin-card-title { font-weight: 700; margin-bottom: 1rem; font-size: 0.95rem; }
+.em-admin-card-title i { background: linear-gradient(120deg, #4f46e5, #00d9ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+.em-budget-progress { height: 14px; border-radius: 8px; background: #eef; }
+.em-budget-progress .progress-bar { background: linear-gradient(90deg, #4f46e5, #7c3aed); }
+.em-remaining-budget h4 { font-weight: 800; color: #17c964; margin: 0; }
+
+.em-table { font-size: 0.85rem; }
+.em-table thead th { font-size: 0.72rem; text-transform: uppercase; color: #6b7280; border-bottom: 2px solid #e9eaf2; font-weight: 700; }
+.em-table td { vertical-align: middle; }
+.em-table img { width: 40px; height: 40px; object-fit: cover; border-radius: 8px; background: #f3f4fa; }
+.em-inv-thumb, .em-inv-name { cursor: pointer; }
+.em-inv-thumb:hover { outline: 2px solid var(--em-primary, #4f46e5); outline-offset: 1px; }
+.em-inv-name:hover { color: var(--em-primary, #4f46e5); text-decoration: underline; }
+.em-inline-input { width: 90px; padding: 2px 6px; font-size: 0.8rem; border: 1px solid #e9eaf2; border-radius: 6px; }
+.em-stock-badge { font-size: 0.7rem; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
+.em-stock-ok { background: #e8f8ef; color: #17c964; }
+.em-stock-low { background: #fff8e8; color: #ffb020; }
+.em-stock-out { background: #ffe8ec; color: #ff3b5c; }
+
+/* ================= Dark mode ================= */
+[data-theme="dark"] .em-stat-card,
+[data-theme="dark"] .em-admin-card {
+  background: var(--em-card-bg, #1b1b2c); border-color: var(--em-border, #2c2c44);
+}
+[data-theme="dark"] .em-stat-label { color: var(--em-text-secondary, #a5a7c4); }
+[data-theme="dark"] .em-stat-value { color: var(--em-text, #eceaf7); }
+[data-theme="dark"] .em-table thead th { border-color: var(--em-border, #2c2c44); color: var(--em-text-secondary, #a5a7c4); }
+[data-theme="dark"] .em-inline-input { background: #23233a; color: #eceaf7; border-color: var(--em-border, #2c2c44); }
+[data-theme="dark"] .em-table img { background: #262638; }
+[data-theme="dark"] .em-budget-progress { background: #23233a; }
+[data-theme="dark"] .em-live-badge { background: rgba(23,201,100,0.15); }
