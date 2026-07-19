@@ -627,4 +627,6 @@ def api_admin_low_stock():
 
 if __name__ == "__main__":
     init_db()
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get("PORT", 5000))
+debug_mode = os.environ.get("RENDER") is None
+app.run(host="0.0.0.0", port=port, debug=debug_mode)
